@@ -1,3 +1,57 @@
+##Prepare Data##
+library(readr)
+library(tidyverse)
+library(xlsx)
+setwd("/Users/Desktop")
+
+av_enrolled <- read.csv(file = "plan_attributes.csv")
+crosswalk <- read.csv(file = "crosswalk.csv")
+plans_hix <- read.csv(file = "plans.csv")
+oep_puf <- read.csv(file = "oep_puf.csv")
+
+plans_hix <- plans_hix %>%
+  select(PLANID, ST, AREA, METAL, PREMI27) %>%
+  filter(METAL == c("Bronze", "Silver", "Gold")) %>%
+  rename(
+    plan_id = PLANID,
+    state = ST,
+    area = AREA,
+    metal = METAL,
+    premium = PREMI27
+  )
+
+oep_puf <- oep_puf %>%
+  select(Cnsmr, Brnz, Slvr, Gld, APTC_Cnsmr, CSR_Cnsmr_73,
+         CSR_Cnsmr_87, CSR_Cnsmr_94, State_Abrvtn, Cnty_FIPS_Cd) %>%
+  rename(
+    total_consumers = Cnsmr, 
+    aptc_consumers = APTC_Cnsmr,
+    silver_73 = CSR_Cnsmr_73,
+    silver_87 = CSR_Cnsmr_87,
+    silver_94 = CSR_Cnsmr_94,
+    fips = Cnty_FIPS_Cd,
+    state = State_Abrvtn,
+    bronze = Brnz,
+    silver = Slvr,
+    gold = Gld
+  )
+
+av_enrolled <- av_enrolled %>%
+  select(StateCode, StandardComponentId, MetalLevel, AVCalculatorOutputNumber) %>%
+  rename(
+    state = StateCode,
+    plan_id = StandardComponentId, 
+    metal = MetalLevel,
+    actuarial_value = AVCalculatorOutputNumber
+    )
+
+plans_hix_low <- plans_hix %>%
+  group_by(area, metal) %>%
+  mutate(premium == min(premium)) %>%
+  filter(premium != FALSE)
+
+crosswalk <- merge(crosswalk, oep_puf, by = "fips")
+
 #Upload Libraries
 library(readr)
 library(naniar)
