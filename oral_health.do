@@ -1,3 +1,6 @@
+/*/*/*/*/* Tabulate Sex and Age */*/*/*/*/
+
+
 use "/Users/finndobkin/Desktop/usa_00008.dta"
 
 /* Relabel variables */
@@ -26,3 +29,37 @@ replace age_cohort = 10 if age >=90 & age <= 99
  
 /* Tabulations */
 collapse (count) hinscaid, by (age_cohort state)
+
+
+/*/*/*/*/* Defining Hispanic Variable */*/*/*/*/
+
+/* Upload file */
+use "/Users/finndobkin/Desktop/usa_00009.dta"
+
+/* Rename variables */
+rename stateicp state
+rename gp group_quarters
+rename hispan hispanic
+rename hinscaid medicaid_user
+
+/* Slim down file */
+ keep year sample serial state gq race hispanic medicaid_user
+ 
+/* Code strings */
+encode race, gen(ethnic)
+encode hispanic, gen(hispanic)
+encode state, gen(state)
+ 
+ /* Recode race */
+gen ethnicity = 1 if race == "white" 
+replace ethnicity = 2 if race == "Black/African American/Negro"
+replace ethnicity = 3 if race == "American Indian or Alaska Native"
+replace ethnicity = 4 if race == "Chinese" | "Japanese" | "Other Asian or Pacific Islander"
+replace ethnicity = 5 if race == "Other race, nec" | "Two major races" | "Three or more major races"
+
+ 
+/* Code strings */
+encode race, gen(ethnic)
+encode hispanic, gen(hispanic)
+encode state, gen(state)
+ 
