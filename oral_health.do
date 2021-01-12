@@ -53,9 +53,4 @@ replace ethnicity = 3 if race == "American Indian or Alaska Native"
 replace ethnicity = 4 if race == "Chinese" | "Japanese" | "Other Asian or Pacific Islander"
 replace ethnicity = 5 if race == "Other race, nec" | "Two major races" | "Three or more major races"
 
- 
-/* Code strings */
-encode race, gen(ethnic)
-encode hispanic, gen(hispanic)
-encode state, gen(state)
- 
+
