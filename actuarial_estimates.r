@@ -1,7 +1,6 @@
 ##Prepare Data##
 library(readr)
 library(tidyverse)
-library(xlsx)
 setwd("/Users/Desktop")
 
 av_enrolled <- read.csv(file = "plan_attributes.csv")
@@ -55,13 +54,10 @@ crosswalk <- merge(crosswalk, oep_puf, by = "fips")
 
 
 ##Impute Data##
-#Upload Libraries
-library(readr)
-library(naniar)
 
-#Import File
-setwd("/Users/Desktop")
-impute_file <- read.csv(file = "premiums_to_impute.csv")
+
+
+impute_file <- plans_hix_low
 
 #Replace 1s with NAs
 impute_file <- impute_file %>%
